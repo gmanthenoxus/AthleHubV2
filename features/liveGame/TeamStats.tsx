@@ -1,7 +1,7 @@
 // src/features/liveGame/TeamStats.tsx
 import React, { useState } from 'react'; 
-import { useNavigation, useRoute } from '@react-navigation/native';                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             
-import { View, Text, FlatList, Button, TouchableOpacity } from 'react-native';
+import { useNavigation, useRoute } from '@react-navigation/native';
+import { View, Text, FlatList, TouchableOpacity, Pressable, StyleSheet } from 'react-native';
 import { getBasketballStats, getBasketballStatsValue } from '../../components/sport/Basketball';
 import { getBadmintonStats, getBadmintonStatsValue } from '../../components/sport/Badminton';
 import { getTableTennisStats, getTableTennisStatsValue } from '../../components/sport/Tabletennis';
@@ -58,12 +58,12 @@ const TeamStats = () => {
 
   const [updatedPlayersA, setUpdatedPlayersA] = useState<Player[]>(playersA);
   const [updatedPlayersB, setUpdatedPlayersB] = useState<Player[]>(playersB);
-  const [selectedPlayer, setSelectedPlayer] = useState<string | null>(null);
+  const [selectedPlayer, setSelectedPlayer] = useState<{ team: string; name: string } | null>(null);
 
   const updatePlayerStats = (team: string, playerName: string, statType: string) => {
     const statIncrement = statsValue[statType] || 1;
 
-    if (team === teamA) {
+    if (team === 'A') {
       const updatedPlayers = updatedPlayersA.map(player => 
         player.name === playerName ? { 
           ...player, 
@@ -94,53 +94,94 @@ const TeamStats = () => {
         console.log(`Team: ${teamB}, Player: ${playerName}, Stat: ${statType}, Current Value: ${updatedPlayer.stats[statType]}`);
       }
     }
-    console.log('Updated  A:', JSON.stringify(updatedPlayersA, null, 2));
-    console.log('Updated  B:', JSON.stringify(updatedPlayersB, null, 2));
+    console.log('Updated Players A:', JSON.stringify(updatedPlayersA, null, 2));
+    console.log('Updated Players B:', JSON.stringify(updatedPlayersB, null, 2));
+  };
+
+  const endMatch = () => {
+    // End the match and navigate to the history page with updated data
+    navigation.navigate('MatchHistory', { updatedMatchDetails: { ...matchDetails, playersA: updatedPlayersA, playersB: updatedPlayersB } });
   };
 
   return (
     <View style={{ marginVertical: 20 }}>
-      <Text>Team A: {teamA}</Text>
-      <FlatList
-        data={updatedPlayersA}
-        keyExtractor={(item) => item.name}
-        renderItem={({ item }) => (
-          <View>
-            <TouchableOpacity onPress={() => setSelectedPlayer(item.name)}>
-              <Text>{item.name}</Text>
-            </TouchableOpacity>
-            {selectedPlayer === item.name && stats.map((stat) => (
-              <Button 
-                key={stat} 
-                onPress={() => updatePlayerStats(teamA, item.name, stat)} 
-                title={`${stat}`} 
-              />
-            ))}
-          </View>
-        )}
-      />
+      <Text style={{ marginTop: 20, fontSize: 18 }}>Select a Player:</Text>
+      <View style={styles.playerList}>
+        {playersA.map((player, index) => (
+          <TouchableOpacity key={index} onPress={() => setSelectedPlayer({ team: 'A', name: player.name })}>
+            <Text style={{ color: selectedPlayer?.name === player.name && selectedPlayer?.team === 'A' ? 'blue' : 'black' }}>
+              {player.name}
+            </Text>
+          </TouchableOpacity>
+        ))}
+      </View>
+      <View style={styles.playerList}>
+        {playersB.map((player, index) => (
+          <TouchableOpacity key={index} onPress={() => setSelectedPlayer({ team: 'B', name: player.name })}>
+            <Text style={{ color: selectedPlayer?.name === player.name && selectedPlayer?.team === 'B' ? 'blue' : 'black' }}>
+              {player.name}
+            </Text>
+          </TouchableOpacity>
+        ))}
+      </View>
 
-      <Text>Team B: {teamB}</Text>
-      <FlatList
-        data={updatedPlayersB}
-        keyExtractor={(item) => item.name}
-        renderItem={({ item }) => (
-          <View>
-            <TouchableOpacity onPress={() => setSelectedPlayer(item.name)}>
-              <Text>{item.name}</Text>
-            </TouchableOpacity>
-            {selectedPlayer === item.name && stats.map((stat) => (
-              <Button 
-                key={stat} 
-                onPress={() => updatePlayerStats(teamB, item.name, stat)} 
-                title={`${stat}`} 
-              />
+      {selectedPlayer && (
+        <View style={{ marginTop: 20 }}>
+          <Text>{`Update stats for ${selectedPlayer.name}`}</Text>
+          <View style={styles.buttonContainer}>
+            {stats.map((stat, index) => (
+              <Pressable
+                key={stat}
+                onPress={() => updatePlayerStats(selectedPlayer.team, selectedPlayer.name, stat)}
+                style={({ pressed }) => [
+                  {
+                    backgroundColor: pressed ? 'lightgray' : 'white',
+                    borderColor: 'black',
+                    borderWidth: 1,
+                    borderRadius: 5,
+                    padding: 10,
+                    margin: 5,
+                    width: '30%',
+                  }
+                ]}
+              >
+                <Text>{`Add ${stat}`}</Text>
+              </Pressable>
             ))}
           </View>
-        )}
-      />
+        </View>
+      )}
+
+      <Pressable
+        onPress={endMatch}
+        style={({ pressed }) => [
+          {
+            backgroundColor: pressed ? 'lightgray' : 'white',
+            borderColor: 'black',
+            borderWidth: 1,
+            borderRadius: 5,
+            padding: 10,
+            margin: 5,
+          }
+        ]}
+      >
+        <Text>End Match</Text>
+      </Pressable>
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  playerList: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    marginTop: 10,
+  },
+  buttonContainer: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    marginTop: 10,
+  },
+});
 
 export default TeamStats;
