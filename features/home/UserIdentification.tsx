@@ -1,15 +1,30 @@
 // src/features/home/UserIdentification.tsx
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { View, Text, TextInput, Button } from 'react-native'
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import useUserIdentification from '../../hooks/useUserIdentification'
 
 const UserIdentification = () => {
   const [name, setName] = useState('')
   const { saveUserName } = useUserIdentification()
 
-  const handleSave = () => {
-    saveUserName(name)
-  }
+  useEffect(() => {
+    // Load the name from storage when the component mounts
+    const loadName = async () => {
+      const storedName = await AsyncStorage.getItem('userName');
+      if (storedName) setName(storedName);
+    };
+    loadName();
+  }, []);
+
+  const saveName = async () => {
+    try {
+      await AsyncStorage.setItem('userName', name);
+      alert('Name saved!');
+    } catch (e) {
+      console.error(e);
+    }
+  };
 
   return (
     <View style={{ margin: 20 }}>
@@ -27,7 +42,7 @@ const UserIdentification = () => {
           width: 200,
         }}
       />
-      <Button title="Save" onPress={handleSave} />
+      <Button title="Save" onPress={saveName} />
     </View>
   )
 }
