@@ -94,8 +94,8 @@ const TeamStats = () => {
         console.log(`Team: ${teamB}, Player: ${playerName}, Stat: ${statType}, Current Value: ${updatedPlayer.stats[statType]}`);
       }
     }
-    console.log('Updated Players A:', JSON.stringify(updatedPlayersA, null, 2));
-    console.log('Updated Players B:', JSON.stringify(updatedPlayersB, null, 2));
+    console.log('Updated  A:', JSON.stringify(updatedPlayersA, null, 2));
+    console.log('Updated  B:', JSON.stringify(updatedPlayersB, null, 2));
   };
 
   return (
