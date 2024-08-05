@@ -19,10 +19,10 @@ export const getBasketballSettings = () => ({
 
 export const getBasketballStats = () => [
   "2PT",
-  "2PT miss",
   "3PT",
-  "3PT miss",
   "FT",
+  "2PT miss",
+  "3PT miss",
   "FT miss",
   "AST",
   "REB", 
@@ -34,10 +34,10 @@ export const getBasketballStats = () => [
 
 export const getBasketballStatsValue = () => ({
   '2PT': 2,
-  "2PT miss": 1,
   "3PT": 3,
-  "3PT miss": 1,
   "FT": 1,
+  "2PT miss": 1,
+  "3PT miss": 1,
   "FT miss": 1,
   "AST": 1,
   "REB": 1, 

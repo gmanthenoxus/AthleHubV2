@@ -1,4 +1,4 @@
-// src/features/matchHistory/MatchHistoryScreen.tsx
+// src/app/match-History/index.tsx
 import React from 'react'
 import { ScrollView, Text } from 'react-native'
 import MatchList from '../../features/matchHistory/MatchList'

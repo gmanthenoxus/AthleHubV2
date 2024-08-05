@@ -9,7 +9,6 @@ const LiveGameScreen = () => {
   return (
     <ScrollView style={{ flex: 1, padding: 20 }}>
       <Text style={{ fontSize: 24, fontWeight: 'bold' }}>Live Game</Text>
-      <RealTimeScoreboard />
       <GameClock />
       <TeamStats />
     </ScrollView>

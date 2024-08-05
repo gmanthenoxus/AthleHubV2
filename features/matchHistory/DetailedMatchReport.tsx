@@ -1,23 +1,76 @@
-// src/features/matchHistory/DetailedMatchReport.tsx
-import React from 'react'
-import { View, Text } from 'react-native'
+import React from 'react';
+import { View, Text, ScrollView, StyleSheet } from 'react-native';
 
-interface DetailedMatchReportProps {
-  match: { id: number, date: string, teams: string, score: string }
-}
+const DetailedMatchReport = ({ match }) => {
+  const renderPlayerStats = (player) => {
+    const stats = Object.keys(player.stats);
 
-const DetailedMatchReport: React.FC<DetailedMatchReportProps> = ({ match }) => {
+    return (
+      <View key={player.name} style={styles.playerStats}>
+        <Text style={styles.playerName}>{player.name}</Text>
+        <View style={styles.statsList}>
+          {stats.map((stat) => (
+            <Text key={`${player.name}-${stat}`} style={styles.statItem}>
+              {stat}: {player.stats[stat]}
+            </Text>
+          ))}
+        </View>
+      </View>
+    );
+  };
+
   return (
-    <View style={{ padding: 20, backgroundColor: '#f9f9f9', marginVertical: 10 }}>
-      <Text style={{ fontSize: 20, fontWeight: 'bold' }}>Detailed Match Report</Text>
+    <ScrollView style={styles.container}>
+      <Text style={styles.header}>Match Report</Text>
       <Text>Date: {match.date}</Text>
-      <Text>Teams: {match.teams}</Text>
-      <Text>Score: {match.score}</Text>
-      {/* Placeholder for additional details */}
-      <Text>Player Performance: ...</Text>
-      <Text>Team Stats: ...</Text>
-    </View>
-  )
-}
+      <Text>Teams: {match.teamA} vs {match.teamB}</Text>
+      <Text>Score: {match.scoreA} : {match.scoreB}</Text>
+      <Text>Sport: {match.sport}</Text>
 
-export default DetailedMatchReport
+      <View style={styles.teamSection}>
+        <Text style={styles.teamHeader}>Team A</Text>
+        {match.playersA.map(renderPlayerStats)}
+      </View>
+
+      <View style={styles.teamSection}>
+        <Text style={styles.teamHeader}>Team B</Text>
+        {match.playersB.map(renderPlayerStats)}
+      </View>
+    </ScrollView>
+  );
+};
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    padding: 20,
+  },
+  header: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    marginBottom: 10,
+  },
+  teamSection: {
+    marginBottom: 20,
+  },
+  teamHeader: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: 5,
+  },
+  playerStats: {
+    marginBottom: 10,
+  },
+  playerName: {
+    fontWeight: 'bold',
+    marginBottom: 5,
+  },
+  statsList: {
+    marginLeft: 10,
+  },
+  statItem: {
+    fontSize: 14,
+  },
+});
+
+export default DetailedMatchReport;
