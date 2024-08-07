@@ -1,4 +1,7 @@
 
+interface StatCategories {
+  [key: string]: string[];
+}
 
 export const getBasketballMatchTypes = () => [
   '5v5', 
@@ -46,5 +49,22 @@ export const getBasketballStatsValue = () => ({
   "TO": 1, 
   "FLS": 1
 });
+
+
+// src/assets/basketballStats.ts
+
+export const competitiveStats: StatCategories = {
+  "5v5": ["PTS", "FGM", "FGA", "3PM", "3PA", "AST", "FT", "FTA", "OREB", "DREB", "STL", "BLK", "TOV", "FLS", "TECH", "FLAG"],
+  "3v3": ["PTS", "FGM", "FGA", "3PM", "3PA", "AST", "FT", "FTA", "OREB", "DREB", "STL", "BLK", "TOV", "FLS", "TECH", "FLAG"],
+  "1v1": ["PTS", "FGM", "FGA", "3PM", "3PA", "AST", "FT", "FTA", "OREB", "DREB", "STL", "BLK", "TOV", "FLS", "TECH", "FLAG"],
+};
+
+export const casualStats: StatCategories = {
+  "5v5": ["PTS", "FGM", "FGA", "3PM", "3PA", "AST", "FT", "FTA", "REB", "STL", "BLK", "FLS", "TOV"],
+  "3v3": ["PTS", "FGM", "FGA", "3PM", "3PA", "AST", "FT", "FTA", "REB", "STL", "BLK", "FLS", "TOV"],
+  "1v1": ["PTS", "FGM", "FGA", "3PM", "3PA", "AST", "FT", "FTA", "REB", "STL", "BLK", "FLS", "TOV"],
+};
+
+
 
 
